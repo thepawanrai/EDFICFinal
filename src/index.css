@@ -762,6 +762,28 @@
   cursor: not-allowed;
 }
 
+/* Mobile-only Top Header Running Marquee */
+@keyframes edficMobileMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.edfic-mobile-marquee {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: edficMobileMarquee 18s linear infinite;
+}
+
+.edfic-mobile-marquee:hover,
+.edfic-mobile-marquee:active {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .edfic-rotate-slow,
   .edfic-float-slow,
@@ -778,7 +800,8 @@
   .edfic-preloader-emblem,
   .edfic-preloader-sweep,
   .edfic-preloader-wave-second,
-  .edfic-hero-enter {
+  .edfic-hero-enter,
+  .edfic-mobile-marquee {
     animation: none !important;
   }
 

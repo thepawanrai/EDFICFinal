@@ -51,32 +51,97 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col bg-white text-[#24343B]">
       {/* Top Clinical Contact & Centre Timing Bar */}
       <div className="bg-[#083642] text-white border-b border-[#0D4A5A]">
-        <div className="mx-auto flex max-w-6xl flex-col gap-1.5 px-4 py-2 text-xs sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        {/* Mobile Only: Smooth continuous running ticker so full contact & timing detail is visible */}
+        <div className="sm:hidden overflow-hidden py-1.5 text-[11px]">
+          <div className="edfic-mobile-marquee">
+            <div className="flex flex-nowrap items-center gap-3 pr-3 shrink-0">
+              <a
+                href={cleanCallHref}
+                className="text-white/95 transition-colors hover:text-[#9BE3F0] whitespace-nowrap shrink-0"
+              >
+                <span className="font-mono-tabular font-medium">
+                  Call/WhatsApp: {displayPhone}
+                </span>
+              </a>
+              <span className="text-white/35 shrink-0" aria-hidden="true">
+                |
+              </span>
+              <a
+                href={`mailto:${displayEmail}`}
+                className="text-white/95 transition-colors hover:text-[#9BE3F0] whitespace-nowrap shrink-0"
+              >
+                <span>{displayEmail}</span>
+              </a>
+              <span className="text-white/35 shrink-0" aria-hidden="true">
+                |
+              </span>
+              <span className="text-white/90 whitespace-nowrap shrink-0">
+                {(clinic?.weekdayHours || 'Monday - Saturday: 9:00 AM - 8:00 PM')
+                  .replace(/[–—]/g, '-')
+                  .replace(/\s*-\s*/g, ' - ')}
+              </span>
+              <span className="text-white/35 shrink-0" aria-hidden="true">
+                |
+              </span>
+            </div>
+
+            {/* Seamless loop duplicate */}
+            <div className="flex flex-nowrap items-center gap-3 pr-3 shrink-0" aria-hidden="true">
+              <a
+                href={cleanCallHref}
+                tabIndex={-1}
+                className="text-white/95 transition-colors hover:text-[#9BE3F0] whitespace-nowrap shrink-0"
+              >
+                <span className="font-mono-tabular font-medium">
+                  Call/WhatsApp: {displayPhone}
+                </span>
+              </a>
+              <span className="text-white/35 shrink-0">|</span>
+              <a
+                href={`mailto:${displayEmail}`}
+                tabIndex={-1}
+                className="text-white/95 transition-colors hover:text-[#9BE3F0] whitespace-nowrap shrink-0"
+              >
+                <span>{displayEmail}</span>
+              </a>
+              <span className="text-white/35 shrink-0">|</span>
+              <span className="text-white/90 whitespace-nowrap shrink-0">
+                {(clinic?.weekdayHours || 'Monday - Saturday: 9:00 AM - 8:00 PM')
+                  .replace(/[–—]/g, '-')
+                  .replace(/\s*-\s*/g, ' - ')}
+              </span>
+              <span className="text-white/35 shrink-0">|</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Tablet & Desktop: Static two-zone contact & hours bar */}
+        <div className="hidden sm:flex mx-auto max-w-6xl items-center justify-between gap-4 px-6 py-2 text-xs lg:px-8">
           {/* Left: Call/WhatsApp & Official Email (text only, no icons) */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <div className="flex flex-nowrap items-center gap-x-4 shrink-0">
             <a
               href={cleanCallHref}
-              className="text-white/95 transition-colors hover:text-[#9BE3F0] whitespace-nowrap"
+              className="text-white/95 transition-colors hover:text-[#9BE3F0] whitespace-nowrap shrink-0"
             >
               <span className="font-mono-tabular font-medium">
                 Call/WhatsApp: {displayPhone}
               </span>
             </a>
 
-            <span className="hidden sm:inline text-white/30" aria-hidden="true">
+            <span className="text-white/30 shrink-0" aria-hidden="true">
               |
             </span>
 
             <a
               href={`mailto:${displayEmail}`}
-              className="text-white/95 transition-colors hover:text-[#9BE3F0] whitespace-nowrap"
+              className="text-white/95 transition-colors hover:text-[#9BE3F0] whitespace-nowrap shrink-0"
             >
               <span>{displayEmail}</span>
             </a>
           </div>
 
           {/* Right: Centre Operating Hours (Monday - Saturday only on top header) */}
-          <div className="text-white/90">
+          <div className="text-white/90 shrink-0">
             <span className="whitespace-nowrap">
               {(clinic?.weekdayHours || 'Monday - Saturday: 9:00 AM - 8:00 PM')
                 .replace(/[–—]/g, '-')
@@ -640,16 +705,19 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
 
         {/* Deep-Teal Bottom Footer Bar */}
         <div className="bg-[#0D4A5A] dark-teal:bg-[#04181F] dark-teal:border-t dark-teal:border-[#1B5564] text-white">
-          <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 lg:px-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs">
-            <p className="text-white/90">
-              © {new Date().getFullYear()} EDFIC - EWA Diagnostic and Fetal Imaging Centre (A Unit of EWA DERMA).
+          <div className="mx-auto max-w-6xl px-3 py-4 sm:px-6 lg:px-8 flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:justify-between text-xs">
+            <p className="text-white/90 text-center sm:text-left leading-relaxed">
+              <span className="block sm:inline whitespace-nowrap text-[10.5px] min-[390px]:text-[11px] sm:text-xs">
+                © {new Date().getFullYear()} EDFIC - EWA Diagnostic and Fetal Imaging Centre
+              </span>{' '}
+              <span className="block sm:inline mt-0.5 sm:mt-0">(A Unit of EWA DERMA).</span>
             </p>
-            <p className="text-white/85">
+            <p className="text-white/85 text-center sm:text-right">
               <a
                 href="https://www.pracharprasar.co"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-4 transition-colors hover:text-white"
+                className="no-underline transition-colors hover:text-white"
               >
                 Developed by Prachar Prasar
               </a>
